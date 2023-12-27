@@ -250,19 +250,19 @@ static int joypad_amux_select(struct analog_mux *amux, int channel)
 	switch(channel) {
 		case 0:	/* EVENT (ABS_RY) */
 			gpio_set_value(amux->sel_a_gpio, 0);
-			gpio_set_value(amux->sel_b_gpio, 0);
+			gpio_set_value(amux->sel_b_gpio, 1);
 			break;
 		case 1:	/* EVENT (ABS_RX) */
 			gpio_set_value(amux->sel_a_gpio, 0);
-			gpio_set_value(amux->sel_b_gpio, 1);
+			gpio_set_value(amux->sel_b_gpio, 0);
 			break;
 		case 2:	/* EVENT (ABS_Y) */
 			gpio_set_value(amux->sel_a_gpio, 1);
-			gpio_set_value(amux->sel_b_gpio, 0);
+			gpio_set_value(amux->sel_b_gpio, 1);
 			break;
 		case 3:	/* EVENT (ABS_X) */
 			gpio_set_value(amux->sel_a_gpio, 1);
-			gpio_set_value(amux->sel_b_gpio, 1);
+			gpio_set_value(amux->sel_b_gpio, 0);
 			break;
 		default:
 			/* amux disanle */
