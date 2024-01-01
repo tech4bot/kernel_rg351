@@ -23,7 +23,7 @@
                 bootargs = "";
 	};
 
-	adc-keys {
+	adc_keys: adc-keys {
 		compatible = "adc-keys";
 		io-channels = <&saradc 2>;
 		io-channel-names = "buttons";
@@ -31,20 +31,20 @@
 		keyup-threshold-microvolt = <1800000>;
 
 		esc-key {
-			linux,code = <KEY_ESC>;
-			label = "esc";
+			linux,code = <BTN_TRIGGER_HAPPY5>;
+			label = "esc/FN";
 			press-threshold-microvolt = <1310000>;
 		};
 
-		home-key {
-			linux,code = <KEY_HOME>;
-			label = "home";
+		sw19 {
+			linux,code = <BTN_TRIGGER_HAPPY1>;
+			label = "select";
 			press-threshold-microvolt = <624000>;
 		};
 
-		menu-key {
-			linux,code = <KEY_MENU>;
-			label = "menu";
+		sw22 {
+			linux,code = <BTN_TRIGGER_HAPPY2>;
+			label = "start";
 			press-threshold-microvolt = <987000>;
 		};
 
@@ -234,25 +234,25 @@
                         label = "GPIO DPAD-DOWN";
                         linux,code = <BTN_DPAD_DOWN>;
                 };
-                sw19 { //sw12
+                sw11 { //sw19
                         gpios = <&gpio2 RK_PB1 GPIO_ACTIVE_LOW>;
                         label = "GPIO F4";
-                        linux,code = <BTN_TRIGGER_HAPPY1>; //Left click BTN_TRIGGER_HAPPY4
+                        linux,code = <BTN_TRIGGER_HAPPY3>; //Left click BTN_TRIGGER_HAPPY4
                 };
-                sw22 { //sw19
+                sw12 { //sw22
                         gpios = <&gpio2 RK_PB2 GPIO_ACTIVE_LOW>;
                         label = "GPIO F1";
-                        linux,code = <BTN_TRIGGER_HAPPY2>; //Right click BTN_TRIGGER_HAPPY1
+                        linux,code = <BTN_TRIGGER_HAPPY4>; //Right click BTN_TRIGGER_HAPPY1
                 };
-				sw12 { //sw22
-                        gpios = <&gpio3 RK_PB4 GPIO_ACTIVE_LOW>;
-                        label = "GPIO F2";
-                        linux,code = <BTN_TRIGGER_HAPPY4>; //NOT mapped
-                };
-				sw11 { //sw11
+				sw19 { //sw11 non existing
                         gpios = <&gpio3 RK_PA7 GPIO_ACTIVE_LOW>;
                         label = "GPIO F3"; 
-                        linux,code = <BTN_TRIGGER_HAPPY3>; //NOT mapped
+                        linux,code = <BTN_TRIGGER_HAPPY1>; //NOT mapped
+                };
+				sw22 { //sw12 non existing
+                        gpios = <&gpio3 RK_PB4 GPIO_ACTIVE_LOW>;
+                        label = "GPIO F2";
+                        linux,code = <BTN_TRIGGER_HAPPY2>; //NOT mapped
                 };
         };
 
@@ -271,6 +271,7 @@
 
 	leds: gpio_leds {
 		compatible = "gpio-leds";
+		status = "okay";
 
 		pinctrl-names = "led_pins";
 		pinctrl-0 = <&led_pins>;
@@ -336,10 +337,12 @@
 			"Microphone", "Mic Jack",
 			"Headphone", "Headphone Jack";
 		simple-audio-card,routing =
-			"Mic Jack", "MICBIAS1",
-			"IN1P", "Mic Jack",
+			"MIC_IN", "Mic Jack",
+			/*"IN1P", "Mic Jack",*/
 			"Headphone Jack", "HPOL",
 			"Headphone Jack", "HPOR";
+		simple-audio-card,hp-det-gpio = <&gpio2 RK_PB3 GPIO_ACTIVE_LOW>;
+		simple-audio-card,codec-hp-det = <1>;
 		simple-audio-card,cpu {
 			sound-dai = <&i2s1_2ch>;
 		};
@@ -347,12 +350,13 @@
 			sound-dai = <&rk817_codec>;
 		};
 	};
+/*
 	rk_headset {
 		compatible = "rockchip_headset";
-		headset_gpio = <&gpio2 11 GPIO_ACTIVE_LOW>;
+		headset_gpio = <&gpio2 RK_PB3 GPIO_ACTIVE_LOW>;
 		pinctrl-names = "default";
 		pinctrl-0 = <&hp_det>;
-	};
+	};*/
 
 	vccsys: vccsys {
 		compatible = "regulator-fixed";
@@ -847,14 +851,15 @@
 
 		rk817_codec: codec {
 			#sound-dai-cells = <0>;
-			compatible = "rockchip,rk817-codec";
+			compatible = "rockchip,rk809-codec","rockchip,rk817-codec";
 			clocks = <&cru SCLK_I2S1_OUT>;
 			clock-names = "mclk";
 			pinctrl-names = "default";
 			pinctrl-0 = <&i2s1_2ch_mclk>;
-			spk-ctl-gpios = <&gpio0 11 GPIO_ACTIVE_HIGH>;
-			hp-volume = <0>;
-			spk-volume = <1>;
+			//hp-ctl-gpios = <&gpio0 RK_PA2 GPIO_ACTIVE_HIGH>;
+			//spk-ctl-gpios = <&gpio0 RK_PB3 GPIO_ACTIVE_HIGH>; //LOW off HIGH on
+			hp-volume = <25>;
+			spk-volume = <25>;
 			status = "okay";
 		};
 	};
@@ -1077,12 +1082,12 @@
 };
 
 &pinctrl {
-
+	/*
 	headphone {
 		hp_det: hp-det {
-			rockchip,pins = <2 11 RK_FUNC_GPIO &pcfg_pull_up>;
+			rockchip,pins = <2 RK_PB3 RK_FUNC_GPIO &pcfg_pull_up>;
 		};
-	};
+	};*/
 
 	pmic {
 		/* ODROID-GO2 : PMIC_INT(GPIO0.PB2) */
@@ -1134,6 +1139,8 @@
 					<2 RK_PA5 RK_FUNC_GPIO &pcfg_pull_up>,
 					<2 RK_PA6 RK_FUNC_GPIO &pcfg_pull_up>,
 					<2 RK_PA7 RK_FUNC_GPIO &pcfg_pull_up>,
+
+					<2 RK_PB3 RK_FUNC_GPIO &pcfg_pull_up>,
 
 					<3 RK_PA7 RK_FUNC_GPIO &pcfg_pull_up>,
 					<3 RK_PC3 RK_FUNC_GPIO &pcfg_pull_up>,
