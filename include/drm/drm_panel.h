@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2013, NVIDIA Corporation.  All rights reserved.
+ * Copyright (C) 2022-present mrfixit2001 (https://github.com/mrfixit2001)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -75,6 +76,21 @@ struct drm_panel_funcs {
 	int (*get_modes)(struct drm_panel *panel);
 	int (*get_timings)(struct drm_panel *panel, unsigned int num_timings,
 			   struct display_timing *timings);
+};
+
+enum drm_panel_orientation {
+	DRM_MODE_PANEL_ORIENTATION_UNKNOWN = -1,
+	DRM_MODE_PANEL_ORIENTATION_NORMAL = 0,
+	DRM_MODE_PANEL_ORIENTATION_BOTTOM_UP,
+	DRM_MODE_PANEL_ORIENTATION_LEFT_UP,
+	DRM_MODE_PANEL_ORIENTATION_RIGHT_UP,
+};
+
+static const struct drm_prop_enum_list drm_panel_orientation_enum_list[] = {
+	{ DRM_MODE_PANEL_ORIENTATION_NORMAL,	"Normal"	},
+	{ DRM_MODE_PANEL_ORIENTATION_BOTTOM_UP,	"Upside Down"	},
+	{ DRM_MODE_PANEL_ORIENTATION_LEFT_UP,	"Left Side Up"	},
+	{ DRM_MODE_PANEL_ORIENTATION_RIGHT_UP,	"Right Side Up"	},
 };
 
 struct drm_panel {
