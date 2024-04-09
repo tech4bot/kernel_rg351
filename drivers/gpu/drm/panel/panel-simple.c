@@ -810,6 +810,7 @@ static int panel_simple_prepare(struct drm_panel *panel)
 	}
 
 	if (p->on_cmds) {
+		panel_simple_dsi_read_panel_id(p);
 		if (p->dsi)
 			err = panel_simple_dsi_send_cmds(p, p->on_cmds);
 		else if (p->cmd_type == CMD_TYPE_SPI)
