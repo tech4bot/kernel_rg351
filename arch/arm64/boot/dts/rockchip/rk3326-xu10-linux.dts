@@ -85,7 +85,7 @@
                 pinctrl-0 = <&btn_pins>;
 
 		/* Analog mux define */
-		io-channel-names = "joy_left", "joy_right";
+		io-channel-names = "joy_xy", "joy_z";
 		io-channels = <&saradc 1>, <&saradc 2>;
 
 		/* adc mux channel count */
@@ -100,7 +100,7 @@
 		button-adc-scale = <2>;
 
 		/* adc deadzone range  */
-		button-adc-deadzone = <100>;
+		button-adc-deadzone = <180>;
 
 		/*
 		  specifies fuzz value that is used to filter noise from
@@ -109,29 +109,38 @@
 		button-adc-fuzz = <32>;
 		button-adc-flat = <32>;
 
+		button-x-default-cal = <1830>;
+		button-y-default-cal = <1800>;
+		button-z-default-cal = <1830>;
+		button-rz-default-cal = <1800>;
+
 		/*
 		  Analog Stick data tuning value(precent)
 		  p = positive direction, n = negative direction
 		  report value = (real_adc_data * tuning_value) / 100
 		*/
-		abs_x-p-tuning = <200>;
-		abs_x-n-tuning = <200>;
+		abs_x-p-tuning = <3280>;
+		abs_x-n-tuning = <3280>;
 
-		abs_y-p-tuning = <200>;
-		abs_y-n-tuning = <200>;
+		abs_y-p-tuning = <3280>;
+		abs_y-n-tuning = <3280>;
 
-		abs_rx-p-tuning = <200>;
-		abs_rx-n-tuning = <200>;
+		abs_z-p-tuning = <3280>;
+		abs_z-n-tuning = <3280>;
 
-		abs_ry-p-tuning = <200>;
-		abs_ry-n-tuning = <200>;
+		abs_rz-p-tuning = <3280>;
+		abs_rz-n-tuning = <3280>;
 
 		/* poll device interval (ms), adc read interval */
 		poll-interval = <10>;
 
-		/* required for RG351MP */
+		/* required for XU10 */
+		btn-lr-to-absx;
+		btn-ud-to-absy;
 		invert-absx;
 		invert-absy;
+		invert-absz;
+		invert-absrz;
 
 		/* gpio button auto repeat set value : default disable */
 		/*
