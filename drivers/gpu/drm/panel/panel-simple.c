@@ -102,7 +102,7 @@ struct panel_desc {
 	} delay;
 
 	u32 bus_format;
-	u8 id[2];
+	u8 id[3];
 };
 
 struct panel_simple {
@@ -112,7 +112,7 @@ struct panel_simple {
 	bool enabled;
 	bool power_invert;
 	bool panel_found;
-	u8 panel_id[2];
+	u8 panel_id[3];
 
 	struct device *dev;
 	const struct panel_desc *desc;
@@ -429,8 +429,8 @@ static void panel_simple_dsi_read_panel_id(struct panel_simple *panel)
 	 * V1 panel id is [30 52]
 	 * V2 panel id is [38 21]
 	 */
-	dev_info(panel->base.dev, "panel id: %02x %02x", 
-		 panel->panel_id[0], panel->panel_id[1]);
+	dev_info(panel->base.dev, "panel id: %02x %02x %02x", 
+		 panel->panel_id[0], panel->panel_id[1], panel->panel_id[2]);
 }
 #else
 static inline int panel_simple_dsi_send_cmds(struct panel_simple *panel,
@@ -514,7 +514,7 @@ static void panel_simple_dsi_reload_cmds(struct panel_simple *panel)
 	const struct device_node *dsi = panel->dsi->host->dev->of_node;
 	struct panel_desc *desc = (struct panel_desc *)panel->desc;
 	struct device_node *np;
-	u8 id[2] = {0, 0};
+	u8 id[3] = {0, 0, 0};
 
 	if (memcmp(panel->panel_id, id, ARRAY_SIZE(id)) == 0)
 		return;
