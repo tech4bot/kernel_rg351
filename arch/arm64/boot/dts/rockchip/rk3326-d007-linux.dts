@@ -283,17 +283,19 @@
 		compatible = "gpio-leds";
 		status = "okay";
 
-		pinctrl-names = "led_pins";
-		pinctrl-0 = <&led_pins>;
+		blue_led {
+			default-state = "off";
+			gpios = <&gpio0 RK_PB7 GPIO_ACTIVE_HIGH>;
+		};
 
 		left_joystick {
 			default-state = "off";
-			gpios = <&gpio2 3 GPIO_ACTIVE_HIGH>;
+			gpios = <&gpio2 RK_PA3 GPIO_ACTIVE_HIGH>;
 		};
 
 		right_joystick  {
 			default-state = "off";
-			gpios = <&gpio2 4 GPIO_ACTIVE_HIGH>;
+			gpios = <&gpio2 RK_PA4 GPIO_ACTIVE_HIGH>;
 		};
 
 
@@ -1005,8 +1007,8 @@
 			chrg_term_mode = <0>;
 			chrg_finish_cur = <300>;
 			virtual_power = <0>;
+			power_dc2otg = <0>;
 			dc_det_adc = <0>;
-			extcon = <&u2phy>;
 		};
 
 		rk817_codec: codec {
@@ -1207,12 +1209,11 @@
 	};
 
 	u2phy_otg: otg-port {
-		status = "okay";
+		status = "disabled";
 	};
 };
 
 &usb20_otg {
-	dr_mode = "host";
 	status = "okay";
 };
 
@@ -1274,11 +1275,6 @@
 		};
 	};
 
-	leds {
-		led_pins: led-pins {
-			rockchip,pins = <0 RK_PC1 RK_FUNC_GPIO &pcfg_pull_none>;
-		};
-	};
 	btns {
 		btn_pins: btn-pins {
 			rockchip,pins = <1 RK_PB4 RK_FUNC_GPIO &pcfg_pull_up>,
