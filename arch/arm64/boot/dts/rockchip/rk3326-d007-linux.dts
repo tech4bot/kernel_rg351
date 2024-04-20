@@ -994,7 +994,6 @@
 			monitor_sec = <5>;
 			virtual_power = <0>;
 			sample_res = <10>;
-			power_dc2otg = <0>;
 		};
 
 		charger {
@@ -1006,9 +1005,7 @@
 			chrg_term_mode = <0>;
 			chrg_finish_cur = <300>;
 			virtual_power = <0>;
-			sample_res = <10>;
-			dc_det_gpio  = <0>;
-			//dc_det_adc = <0>;
+			dc_det_adc = <0>;
 			extcon = <&u2phy>;
 		};
 
@@ -1196,7 +1193,7 @@
 };
 
 &tsadc {
-	pinctrl-names = "gpio", "otpout";
+	pinctrl-names = "init", "default";
 	pinctrl-0 = <&tsadc_otp_gpio>;
 	pinctrl-1 = <&tsadc_otp_out>;
 	status = "okay";
@@ -1210,11 +1207,12 @@
 	};
 
 	u2phy_otg: otg-port {
-		status = "disabled";
+		status = "okay";
 	};
 };
 
 &usb20_otg {
+	dr_mode = "host";
 	status = "okay";
 };
 
