@@ -284,20 +284,7 @@
 	};
 
 	leds: gpio_leds {
-		compatible = "gpio-leds";
-
-		pinctrl-names = "led_pins";
-		pinctrl-0 = <&led_pins>;
-
-		led-0 {
-			gpios = <&gpio0 RK_PB3 GPIO_ACTIVE_HIGH>;
-			default-state = "off";
-	        };
-
-		led-1 {
-			gpios = <&gpio0 RK_PB4 GPIO_ACTIVE_HIGH>;
-			default-state = "off";
-	        };
+		status = "disabled";
 	};
 
 	rk817-sound {
@@ -331,19 +318,6 @@
 		regulator-always-on;
 		regulator-min-microvolt = <3800000>;
 		regulator-max-microvolt = <3800000>;
-	};
-
-	vcc_host: vcc_host {
-		compatible = "regulator-fixed";
-		regulator-name = "vcc_host";
-		regulator-min-microvolt = <5000000>;
-		regulator-max-microvolt = <5000000>;
-
-		gpio = <&gpio0 RK_PA2 GPIO_ACTIVE_HIGH>;
-		enable-active-high;
-		regulator-always-on;
-		regulator-boot-on;
-		vin-supply = <&dcdc_boost>;
 	};
 };
 
@@ -1437,13 +1411,12 @@
 	};
 
 	u2phy_otg: otg-port {
-		status = "disabled";
+		status = "okay";
 	};
 };
 
 &usb20_otg {
 	status = "okay";
-	dr_mode = "host";
 };
 
 /*
@@ -1502,13 +1475,6 @@
 		soc_slppin_rst: soc_slppin_rst {
 			rockchip,pins =
 				<0 RK_PA4 RK_FUNC_2 &pcfg_pull_none>;
-		};
-	};
-
-	leds {
-		led_pins: led-pins {
-			rockchip,pins = <0 RK_PB3 RK_FUNC_GPIO &pcfg_pull_none>,
-					<0 RK_PB4 RK_FUNC_GPIO &pcfg_pull_none>;
 		};
 	};
 	
