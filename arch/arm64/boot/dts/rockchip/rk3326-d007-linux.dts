@@ -284,7 +284,7 @@
 		status = "okay";
 
 		blue_led {
-			default-state = "on";
+			default-state = "off";
 			gpios = <&gpio0 RK_PB7 GPIO_ACTIVE_HIGH>;
 		};
 
@@ -359,12 +359,6 @@
 		regulator-max-microvolt = <3800000>;
 	};
 
-	ext_cam_clk: external-camera-clock {
-		compatible = "fixed-clock";
-		clock-frequency = <25000000>;
-		clock-output-names = "CLK_CAMERA_25MHZ";
-		#clock-cells = <0>;
-	};
 };
 &bus_apll {
 	bus-supply = <&vdd_logic>;
@@ -990,7 +984,7 @@
 			sleep_enter_current = <300>;
 			sleep_exit_current = <300>;
 			sleep_filter_current = <100>;
-			power_off_thresd = <3400>;
+			power_off_thresd = <3500>;
 			zero_algorithm_vol = <3850>;
 			max_soc_offset = <60>;
 			monitor_sec = <5>;
@@ -1007,7 +1001,6 @@
 			chrg_term_mode = <0>;
 			chrg_finish_cur = <300>;
 			virtual_power = <0>;
-			power_dc2otg = <0>;
 			dc_det_adc = <0>;
 			extcon = <&u2phy>;
 		};
@@ -1036,26 +1029,7 @@
 
 /* MIPI CSI I2C */
 &i2c2 {
-	status = "okay";
-
-	clock-frequency = <100000>;
-
-	i2c-scl-falling-time-ns = <50>;
-	i2c-scl-rising-time-ns = <300>;
-
-	ov5647: ov5647@36 {
-		compatible = "ovti,ov5647";
-		reg = <0x36>;
-		clocks = <&ext_cam_clk>;
-		status = "okay";
-
-		port {
-			ov5647_out: endpoint {
-				remote-endpoint = <&ov5647_in>;
-				data-lanes = <1 2>;
-			};
-		};
-	};
+	status = "disabled";
 };
 
 /* I2S 1 Channel Used */
@@ -1088,48 +1062,10 @@
 
 &mipi_dphy_rx0 {
 	status = "okay";
-
-	ports {
-		#address-cells = <1>;
-		#size-cells = <0>;
-
-		port@0 {
-			reg = <0>;
-
-			#address-cells = <1>;
-			#size-cells = <0>;
-
-			ov5647_in: endpoint@1 {
-				reg = <1>;
-
-				remote-endpoint = <&ov5647_out>;
-				data-lanes = <1 2>;
-			};
-		};
-
-		port@1 {
-			reg = <1>;
-
-			dphy_rx0_out: endpoint@0 {
-				remote-endpoint = <&isp0_mipi_in>;
-			};
-		};
-	};
 };
 
 &rkisp1 {
 	status = "okay";
-
-	port {
-		#address-cells = <1>;
-		#size-cells = <0>;
-
-		/* mipi */
-		isp0_mipi_in: endpoint@0 {
-			reg = <0>;
-			remote-endpoint = <&dphy_rx0_out>;
-		};
-	};
 };
 
 &spi0 {
@@ -1205,11 +1141,11 @@
 &u2phy {
 	status = "okay";
 
-	u2phy_otg: otg-port {
+	u2phy_host: host-port {
 		status = "okay";
 	};
 
-	u2phy_host: host-port {
+	u2phy_otg: otg-port {
 		status = "okay";
 	};
 };
