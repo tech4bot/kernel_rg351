@@ -284,7 +284,7 @@
 		status = "okay";
 
 		blue_led {
-			default-state = "off";
+			default-state = "on";
 			gpios = <&gpio0 RK_PB7 GPIO_ACTIVE_HIGH>;
 		};
 
@@ -1009,6 +1009,7 @@
 			virtual_power = <0>;
 			power_dc2otg = <0>;
 			dc_det_adc = <0>;
+			extcon = <&u2phy>;
 		};
 
 		rk817_codec: codec {
@@ -1195,7 +1196,7 @@
 };
 
 &tsadc {
-	pinctrl-names = "init", "default";
+	pinctrl-names = "gpio", "otpout";
 	pinctrl-0 = <&tsadc_otp_gpio>;
 	pinctrl-1 = <&tsadc_otp_out>;
 	status = "okay";
@@ -1204,12 +1205,12 @@
 &u2phy {
 	status = "okay";
 
-	u2phy_host: host-port {
+	u2phy_otg: otg-port {
 		status = "okay";
 	};
 
-	u2phy_otg: otg-port {
-		status = "disabled";
+	u2phy_host: host-port {
+		status = "okay";
 	};
 };
 
