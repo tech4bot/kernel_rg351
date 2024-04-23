@@ -476,7 +476,24 @@ static int panel_simple_of_get_cmd(struct device *dev,
 static int panel_simple_get_cmds(struct panel_simple *panel, 
 				 struct device_node *np)
 {
+	struct drm_display_mode *mode;
 	int err;
+
+	if (desc->modes) 
+		mode = (struct drm_display_mode *)desc->modes;
+	else 
+		mode = devm_kzalloc(dev, sizeof(*mode), GFP_KERNEL);
+	
+	if (!mode)
+		return -ENOMEM;
+
+	err = of_get_drm_display_mode(panel->dev->of_node, mode,
+				      OF_USE_NATIVE_MODE);
+	if (!err) {
+		desc->modes = mode;
+		desc->num_modes = 1;
+
+	}
 
 	err = panel_simple_of_get_cmd(panel->dev, np, "panel-init-sequence",
 				      &panel->on_cmds);
@@ -594,6 +611,7 @@ static int panel_simple_get_fixed_modes(struct panel_simple *panel)
 	return num;
 }
 
+/*
 static int panel_simple_of_get_native_mode(struct panel_simple *panel)
 {
 	struct drm_connector *connector = panel->base.connector;
@@ -628,7 +646,7 @@ static int panel_simple_of_get_native_mode(struct panel_simple *panel)
 
 	return 1;
 }
-
+*/
 static int panel_simple_regulator_enable(struct drm_panel *panel)
 {
 	struct panel_simple *p = to_panel_simple(panel);
@@ -850,6 +868,9 @@ static int panel_simple_get_modes(struct drm_panel *panel)
 {
 	struct panel_simple *p = to_panel_simple(panel);
 	int num = 0;
+
+	/* add device node plane modes */
+	//num += panel_simple_of_get_native_mode(p);
 
 	/* probe EDID if a DDC bus is available */
 	if (p->ddc) {
