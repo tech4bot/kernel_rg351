@@ -136,6 +136,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3326-rg351v-linux.dtb
 dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3326-rg351mp-linux.dtb
 dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3326-xu10-linux.dtb
 dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3326-d007-linux.dtb
+dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3326-r50s-linux.dtb
 
 always		:= $(dtb-y)
 subdir-y	:= $(dts-dirs)
