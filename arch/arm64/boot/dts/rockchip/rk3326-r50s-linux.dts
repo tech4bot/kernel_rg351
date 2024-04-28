@@ -16,8 +16,8 @@
 #include "rk3326-linux.dtsi"
 
 / {
-	model = "Game Console R50S";
-	compatible = "rockchip,rk3326-r50s-linux", "rockchip,rk3326";
+	model = "Anbernic RG351MP";
+	compatible = "rockchip,rk3326-rg351mp-linux", "rockchip,rk3326";
 
 	chosen {
                 bootargs = "";
