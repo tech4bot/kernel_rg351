@@ -899,11 +899,19 @@
 	opp-786000000 {
 		opp-hz = /bits/ 64 <786000000>;
 		opp-microvolt = <1150000>;
+		opp-microvolt-L0 = <1150000>;
+		opp-microvolt-L1 = <1100000>;
+		opp-microvolt-L2 = <1075000>;
+		opp-microvolt-L3 = <1050000>;
 	};
 
 	opp-840000000 {
 		opp-hz = /bits/ 64 <840000000>;
 		opp-microvolt = <1150000>;
+		opp-microvolt-L0 = <1150000>;
+		opp-microvolt-L1 = <1100000>;
+		opp-microvolt-L2 = <1075000>;
+		opp-microvolt-L3 = <1050000>;
 	};
 };
 
