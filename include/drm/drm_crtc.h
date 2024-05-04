@@ -3,6 +3,7 @@
  * Copyright © 2007-2008 Dave Airlie
  * Copyright © 2007-2008 Intel Corporation
  *   Jesse Barnes <jesse.barnes@intel.com>
+ * Copyright (C) 2022-present mrfixit2001 (https://github.com/mrfixit2001)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -240,6 +241,8 @@ struct drm_display_info {
 	 * @hdmi: advance features of a HDMI sink.
 	 */
 	struct drm_hdmi_info hdmi;
+
+	int panel_orientation;
 };
 
 /* data corresponds to displayid vend/prod/serial */
@@ -1677,6 +1680,7 @@ struct drm_mode_config {
 	struct drm_property *scaling_mode_property;
 	struct drm_property *aspect_ratio_property;
 	struct drm_property *dirty_info_property;
+	struct drm_property *panel_orientation_property;
 
 	/* Optional color correction properties */
 	struct drm_property *degamma_lut_property;

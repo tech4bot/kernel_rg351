@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2013, NVIDIA Corporation.  All rights reserved.
+ * Copyright (C) 2022-present mrfixit2001 (https://github.com/mrfixit2001)
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -141,6 +142,8 @@ struct panel_simple {
 	struct panel_cmds *off_cmds;
 	struct panel_cmds *id_cmds;
 	struct device_node *np_crtc;
+
+	enum drm_panel_orientation orientation;
 };
 
 enum rockchip_cmd_type {
@@ -848,7 +851,13 @@ static int panel_simple_enable(struct drm_panel *panel)
 
 static int panel_simple_get_modes(struct drm_panel *panel)
 {
+	struct drm_connector *connector = panel->connector;
 	struct panel_simple *p = to_panel_simple(panel);
+
+	struct drm_device *dev = connector->dev;
+	struct drm_display_info *info = &connector->display_info;
+	struct drm_property *prop;
+
 	int num = 0;
 
 	/* add device node plane modes */
@@ -867,6 +876,33 @@ static int panel_simple_get_modes(struct drm_panel *panel)
 		}
 	}
 
+	/* Set the panel orientation */
+
+	/* Already set? */
+	if (info->panel_orientation != DRM_MODE_PANEL_ORIENTATION_UNKNOWN)
+		goto out;
+
+	/* Don't attach the property if the orientation is unknown */
+	if (p->orientation == DRM_MODE_PANEL_ORIENTATION_UNKNOWN)
+		goto out;
+
+	info->panel_orientation = p->orientation;
+	prop = dev->mode_config.panel_orientation_property;
+	if (!prop) {
+		prop = drm_property_create_enum(dev, DRM_MODE_PROP_IMMUTABLE,
+				"panel orientation",
+				drm_panel_orientation_enum_list,
+				ARRAY_SIZE(drm_panel_orientation_enum_list));
+		if (!prop)
+			goto out;
+
+		dev->mode_config.panel_orientation_property = prop;
+	}
+
+	drm_object_attach_property(&connector->base, prop,
+				   info->panel_orientation);
+
+out:
 	return num;
 }
 
@@ -1138,6 +1174,20 @@ static int panel_simple_probe(struct device *dev, const struct panel_desc *desc)
 			dev_err(dev, "failed to find ddc-i2c-bus: %d\n", err);
 			goto free_backlight;
 		}
+	}
+
+	panel->orientation = DRM_MODE_PANEL_ORIENTATION_UNKNOWN;
+	if (!of_property_read_u32(dev->of_node, "rotation", &val)) {
+		if (val == 0)
+			panel->orientation = DRM_MODE_PANEL_ORIENTATION_NORMAL;
+		else if (val == 90)
+			panel->orientation = DRM_MODE_PANEL_ORIENTATION_RIGHT_UP;
+		else if (val == 180)
+			panel->orientation = DRM_MODE_PANEL_ORIENTATION_BOTTOM_UP;
+		else if (val == 270)
+			panel->orientation = DRM_MODE_PANEL_ORIENTATION_LEFT_UP;
+		else
+			panel->orientation = DRM_MODE_PANEL_ORIENTATION_UNKNOWN;
 	}
 
 	drm_panel_init(&panel->base);
