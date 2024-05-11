@@ -475,7 +475,7 @@
 	panel@0 {
 		compatible = "elida,kd35t133", "simple-panel-dsi";
 		reg = <0>;
-		id = [30 52];
+		id = [30 52 01];
 
 		/* pwm1 backlight */
 		backlight = <&backlight>;
@@ -759,7 +759,7 @@
 		compatible = "elida,kd35t133", "simple-panel-dsi";
 		/* don't register this panel */
 		//reg = <0>;
-		id = [38 21];
+		id = [38 21 1F];
 		backlight = <&backlight>;
 		//power-supply = <&vcc_lcd>;
 		//gpio = <&gpio0 RK_PC2 GPIO_ACTIVE_HIGH>;
